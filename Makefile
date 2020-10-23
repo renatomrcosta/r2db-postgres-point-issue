@@ -4,4 +4,4 @@ test: run-db
 
 .PHONY: run-db
 run-db:
-	docker-compose up
+	docker-compose up -d
