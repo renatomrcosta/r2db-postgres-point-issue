@@ -1,8 +1,7 @@
 package com.xunfos.r2dbpointissue.point
 
-import com.xunfos.r2dbpointissue.repository.PointyTable
 import com.xunfos.r2dbpointissue.repository.PointyTableRepository
-import io.r2dbc.postgresql.codec.Point
+import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
@@ -35,15 +34,17 @@ class TestPointHandling {
     @Test
     fun `Should Insert Point Values in the DB`() = runBlocking {
         // Now trying to insert a new value:
-        val uuid = UUID.randomUUID()
         val xCoordinate = 17.23
         val yCoordinate = 32.21
-        pointyTableRepository.save(
-            PointyTable(uuid, "New item that will fail", Point.of(xCoordinate, yCoordinate))
-        )
+        val migratedValue = pointyTableRepository.findById(
+            UUID.fromString("0679a290-8015-473d-b4f4-3bbff0c35fdb")
+        ).awaitSingle()
+        val savedValue = pointyTableRepository.save(
+            migratedValue.copy(description = "Banana")
+        ).awaitFirst()
 
-        val insertedValue = pointyTableRepository.findById(uuid).awaitSingle()
-        Assertions.assertEquals(xCoordinate, insertedValue.location.x)
-        Assertions.assertEquals(yCoordinate, insertedValue.location.y)
+        val insertedValue =
+            pointyTableRepository.findById(UUID.fromString("0679a290-8015-473d-b4f4-3bbff0c35fdb")).awaitSingle()
+        Assertions.assertEquals("Banana", insertedValue.description)
     }
 }
