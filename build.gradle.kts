@@ -34,9 +34,8 @@ dependencies {
     runtimeOnly("io.r2dbc:r2dbc-postgresql")
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.flywaydb:flyway-core")
-    implementation("io.r2dbc:r2dbc-postgresql")
+    implementation("io.r2dbc:r2dbc-postgresql:0.8.6.RELEASE")
 
-    implementation("com.zaxxer:HikariCP:3.4.5")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
