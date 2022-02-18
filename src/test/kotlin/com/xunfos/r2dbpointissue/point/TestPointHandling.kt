@@ -38,9 +38,10 @@ class TestPointHandling {
         val uuid = UUID.randomUUID()
         val xCoordinate = 17.23
         val yCoordinate = 32.21
+
         pointyTableRepository.save(
             PointyTable(uuid, "New item that will fail", Point.of(xCoordinate, yCoordinate))
-        )
+        ).awaitSingle()
 
         val insertedValue = pointyTableRepository.findById(uuid).awaitSingle()
         Assertions.assertEquals(xCoordinate, insertedValue.location.x)
